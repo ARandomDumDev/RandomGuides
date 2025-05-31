@@ -22,14 +22,14 @@ export async function GET() {
     const mockNotifications = [
       {
         id: "1",
-        message: "Your guide 'How to Create a TikTok Trend' was published successfully!",
+        message: "The logo is broken and the admin panel for me is broken and the global chat is broken is it my fault? idk",
         read: false,
         created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 minutes ago
         type: "success",
       },
       {
         id: "2",
-        message: "Someone liked your guide 'Top 10 Spotify Playlists'",
+        message: "yall i cant control anything the one above me lists everything broken",
         read: false,
         created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 minutes ago
         type: "info",
