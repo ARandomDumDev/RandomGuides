@@ -1,48 +1,28 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { createSession } from "@/lib/session"
-import { authenticateUser } from "@/lib/auth"
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import { NextResponse } from "next/server"
 
-// Keep the hardcoded admin account for backwards compatibility
-const ADMIN_USERNAME = "RandomaticPerson"
-const ADMIN_PASSWORD = "Superidol1"
+import type { Database } from "@/lib/database.types"
 
-export async function POST(request: NextRequest) {
-  try {
-    const formData = await request.formData()
-    const username = formData.get("username") as string
-    const password = formData.get("password") as string
+export async function POST(request: Request) {
+  const requestUrl = new URL(request.url)
+  const formData = await request.formData()
+  const email = String(formData.get("email"))
+  const password = String(formData.get("password"))
+  const supabase = createRouteHandlerClient<Database>({ cookies })
 
-    console.log("Login attempt:", { username })
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
 
-    // Check if it's the admin account first (backwards compatibility)
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      await createSession(username)
-      console.log("Admin login successful")
-      return NextResponse.json({ success: true })
-    }
-
-    // Try to authenticate with database
-    try {
-      const user = await authenticateUser(username, password)
-      await createSession(user.username)
-      console.log("User login successful:", user.username)
-      return NextResponse.json({ success: true })
-    } catch (authError: any) {
-      console.log("Database auth failed:", authError.message)
-
-      if (authError.message === "Account pending approval") {
-        return NextResponse.json(
-          {
-            error: "Your account is pending approval. Please contact kanedavidpersonal@gmail.com to get verified.",
-          },
-          { status: 403 },
-        )
-      }
-
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 })
-    }
-  } catch (error) {
-    console.error("Login error:", error)
-    return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 })
+  if (error) {
+    return NextResponse.redirect(`${requestUrl.origin}/login?error=Could not authenticate user`, {
+      status: 301,
+    })
   }
+
+  return NextResponse.redirect(requestUrl.origin, {
+    status: 301,
+  })
 }

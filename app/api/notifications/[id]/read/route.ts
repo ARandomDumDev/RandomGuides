@@ -1,27 +1,24 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { decrypt } from "@/lib/session"
+import { supabase } from "../../../../lib/supabase"
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
-    // Check authentication
-    const cookieStore = await cookies()
-    const session = cookieStore.get("session")?.value
+    const { id } = params
 
-    if (!session) {
-      return NextResponse.json({ success: false }, { status: 401 })
+    if (!id) {
+      return new NextResponse("Notification ID is required", { status: 400 })
     }
 
-    const payload = await decrypt(session)
-    if (!payload) {
-      return NextResponse.json({ success: false }, { status: 401 })
+    const { data, error } = await supabase.from("notifications").update({ isRead: true }).eq("id", id)
+
+    if (error) {
+      console.error("Error updating notification:", error)
+      return new NextResponse("Internal Server Error", { status: 500 })
     }
 
-    // In a real app, you would update the database
-    // For now, just return success
-    return NextResponse.json({ success: true })
+    return NextResponse.json(data)
   } catch (error) {
-    console.error("Error marking notification as read:", error)
-    return NextResponse.json({ success: false }, { status: 500 })
+    console.error("Error in PUT request:", error)
+    return new NextResponse("Internal Server Error", { status: 500 })
   }
 }

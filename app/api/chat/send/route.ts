@@ -1,46 +1,40 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { decrypt } from "@/lib/session"
 
-// Mock storage (use database in production)
-let chatMessages: any[] = []
+import { supabase } from "../../../lib/supabase"
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   try {
-    const { message } = await request.json()
+    const { message, chatId } = await req.json()
 
-    // Check authentication
-    const cookieStore = await cookies()
-    const session = cookieStore.get("session")?.value
-
-    if (!session) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
+    if (!message || !chatId) {
+      return new NextResponse("Missing message or chatId", { status: 400 })
     }
 
-    const payload = await decrypt(session)
-    if (!payload) {
-      return NextResponse.json({ error: "Invalid session" }, { status: 401 })
+    // Basic validation, you might want to improve this
+    if (typeof message !== "string" || message.length === 0) {
+      return new NextResponse("Invalid message format", { status: 400 })
     }
 
-    // Add message
-    const newMessage = {
-      id: `msg-${Date.now()}`,
-      username: payload.username,
-      message: message.trim(),
-      timestamp: new Date().toISOString(),
-      isOwner: payload.username === "RandomaticPerson",
+    // Insert the message into the Supabase database
+    const { data, error } = await supabase
+      .from("messages")
+      .insert([
+        {
+          chat_id: chatId,
+          content: message,
+          sender_id: "user", // Replace with actual user ID if available
+        },
+      ])
+      .select("*")
+
+    if (error) {
+      console.error("Supabase error:", error)
+      return new NextResponse("Failed to send message", { status: 500 })
     }
 
-    chatMessages.push(newMessage)
-
-    // Keep only last 50 messages
-    if (chatMessages.length > 50) {
-      chatMessages = chatMessages.slice(-50)
-    }
-
-    return NextResponse.json({ success: true })
+    return NextResponse.json(data[0])
   } catch (error) {
-    console.error("Error sending message:", error)
-    return NextResponse.json({ error: "Failed to send message" }, { status: 500 })
+    console.error("Server error:", error)
+    return new NextResponse("Internal server error", { status: 500 })
   }
 }

@@ -1,41 +1,21 @@
 {
-  "name": "RandomGuides - Guides 4 Gen Z",
+  "name": "Random Guides",
   "short_name": "RandomGuides",
-  "description": "The ultimate guide collection for Gen Z",
+  "description": "A community platform for sharing guides and tutorials",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#8b5cf6",
-  "theme_color": "#ec4899",
-  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9",
   "icons": [
     {
-      "src": "/logo.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/logo.png",
+      "src": "/icon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/logo.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
-      "src": "/logo.png",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "/logo.png",
-      "sizes": "72x72",
+      "src": "/icon.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "categories": ["education", "productivity", "social"],
-  "lang": "en",
-  "dir": "ltr"
+  ]
 }

@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs"
-import { supabase } from "./supabase"
+import { supabaseAdmin } from "./supabase-server"
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12)
@@ -11,7 +11,7 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 
 export async function createUser(username: string, email: string, password: string) {
   // Check if username or email already exists
-  const { data: existingUser } = await supabase
+  const { data: existingUser } = await supabaseAdmin
     .from("users")
     .select("id")
     .or(`username.eq.${username},email.eq.${email}`)
@@ -25,7 +25,7 @@ export async function createUser(username: string, email: string, password: stri
   const passwordHash = await hashPassword(password)
 
   // Create user
-  const { data: user, error } = await supabase
+  const { data: user, error } = await supabaseAdmin
     .from("users")
     .insert({
       username,
@@ -44,7 +44,7 @@ export async function createUser(username: string, email: string, password: stri
 
 export async function authenticateUser(username: string, password: string) {
   // Get user by username
-  const { data: user, error } = await supabase.from("users").select("*").eq("username", username).single()
+  const { data: user, error } = await supabaseAdmin.from("users").select("*").eq("username", username).single()
 
   if (error || !user) {
     throw new Error("Invalid credentials")

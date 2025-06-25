@@ -1,27 +1,21 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 import { cookies } from "next/headers"
-import { decrypt } from "@/lib/session"
+import { NextResponse } from "next/server"
 
-export async function GET(request: NextRequest) {
-  try {
-    const cookieStore = await cookies()
-    const session = cookieStore.get("session")?.value
+import type { Database } from "@/lib/database.types"
 
-    if (!session) {
-      return NextResponse.json({ authenticated: false }, { status: 401 })
-    }
+export const dynamic = "force-dynamic"
 
-    const payload = await decrypt(session)
-    if (!payload) {
-      return NextResponse.json({ authenticated: false }, { status: 401 })
-    }
+export async function GET(): Promise<NextResponse> {
+  const supabase = createRouteHandlerClient<Database>({ cookies })
 
-    return NextResponse.json({
-      authenticated: true,
-      username: payload.username,
-    })
-  } catch (error) {
-    console.error("Auth check error:", error)
-    return NextResponse.json({ authenticated: false }, { status: 401 })
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  if (session) {
+    return NextResponse.json({ user: session.user })
   }
+
+  return NextResponse.json({ user: null })
 }

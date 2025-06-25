@@ -1,27 +1,35 @@
-import { NextResponse } from "next/server"
+import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 import { cookies } from "next/headers"
-import { decrypt } from "@/lib/session"
+import { NextResponse } from "next/server"
 
-export async function POST() {
+export const dynamic = "force-dynamic"
+
+export async function POST(request: Request) {
+  const supabase = createRouteHandlerClient({ cookies })
+
   try {
-    // Check authentication
-    const cookieStore = await cookies()
-    const session = cookieStore.get("session")?.value
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
-    if (!session) {
-      return NextResponse.json({ success: false }, { status: 401 })
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const payload = await decrypt(session)
-    if (!payload) {
-      return NextResponse.json({ success: false }, { status: 401 })
+    const { error } = await supabase
+      .from("notifications")
+      .update({ read: true })
+      .eq("user_id", user.id)
+      .eq("read", false)
+
+    if (error) {
+      console.error("Error updating notifications:", error)
+      return NextResponse.json({ error: "Failed to mark notifications as read" }, { status: 500 })
     }
 
-    // In a real app, you would update the database
-    // For now, just return success
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ message: "All notifications marked as read" }, { status: 200 })
   } catch (error) {
-    console.error("Error marking all notifications as read:", error)
-    return NextResponse.json({ success: false }, { status: 500 })
+    console.error("Unexpected error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

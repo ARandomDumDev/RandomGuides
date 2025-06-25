@@ -12,7 +12,7 @@ import { supabase, type Guide, type GuideElement } from "@/lib/supabase"
 
 type SortOption = "newest" | "oldest" | "title-asc" | "title-desc"
 
-export function PublicGuidesList() {
+const PublicGuidesList = () => {
   const [guides, setGuides] = useState<Guide[]>([])
   const [guideElements, setGuideElements] = useState<Record<string, GuideElement[]>>({})
   const [loading, setLoading] = useState(true)
@@ -361,3 +361,6 @@ export function PublicGuidesList() {
     </div>
   )
 }
+
+export { PublicGuidesList }
+export default PublicGuidesList

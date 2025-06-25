@@ -1,15 +1,11 @@
-"use client"
+'use client'
 
-import type React from "react"
+import * as React from 'react'
+import {
+  ThemeProvider as NextThemesProvider,
+  type ThemeProviderProps,
+} from 'next-themes'
 
-import { useEffect } from "react"
-import { loadTheme, applyTheme } from "@/lib/settings"
-
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    const theme = loadTheme()
-    applyTheme(theme)
-  }, [])
-
-  return <>{children}</>
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
 }

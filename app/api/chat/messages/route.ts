@@ -1,27 +1,34 @@
 import { NextResponse } from "next/server"
 
-// Mock chat messages storage (in production, use a database)
-let chatMessages: any[] = []
-const chatDisabled = false
+import { supabase } from "../../../lib/supabase"
 
-export async function GET() {
+export async function POST(request: Request) {
   try {
-    // In production, fetch from database
-    return NextResponse.json({
-      messages: chatMessages,
-      disabled: chatDisabled,
-    })
+    const { message, chatId, userId } = await request.json()
+
+    if (!message || !chatId || !userId) {
+      return new NextResponse("Missing fields", { status: 400 })
+    }
+
+    const { data, error } = await supabase
+      .from("messages")
+      .insert([
+        {
+          content: message,
+          chat_id: chatId,
+          user_id: userId,
+        },
+      ])
+      .select("*")
+
+    if (error) {
+      console.error("Error inserting message:", error)
+      return new NextResponse("Error inserting message", { status: 500 })
+    }
+
+    return NextResponse.json(data[0])
   } catch (error) {
-    console.error("Error fetching chat messages:", error)
-    return NextResponse.json({ messages: [], disabled: false }, { status: 500 })
+    console.error("[MESSAGES_POST]", error)
+    return new NextResponse("Internal error", { status: 500 })
   }
 }
-
-// Clear messages every hour (in production, use a cron job)
-setInterval(
-  () => {
-    chatMessages = []
-    console.log("Chat messages cleared")
-  },
-  60 * 60 * 1000,
-) // 1 hour
