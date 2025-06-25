@@ -178,10 +178,11 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center p-4 animate-fade-in">
       <div className="text-center space-y-8 max-w-4xl w-full">
-        <div className="space-y-4 animate-slide-in-up">
-          <div className="relative">
+        <div className="space-y-6 animate-slide-in-up">
+          {/* Separated 404 and game controller */}
+          <div className="space-y-4">
             <h1 className="text-9xl font-bold text-white opacity-20 animate-pulse-subtle">404</h1>
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex justify-center">
               <Gamepad2 className="h-16 w-16 text-cyan-400 animate-bounce-subtle" />
             </div>
           </div>
