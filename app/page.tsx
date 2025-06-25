@@ -42,14 +42,18 @@ export default function HomePage() {
             <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
               {loading ? "Welcome to RandomGuides" : user ? `Welcome back, ${user}! 👋` : "Welcome to RandomGuides"}
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-white/90 leading-relaxed">
+            <p className="text-xl md:text-2xl mb-8 text-white/90 leading-relaxed font-medium">
               {user ? "Your Community's Guides" : "Explore Our Guides"} - The ultimate collection of tutorials, tips,
               and tricks for Gen Z
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               {user ? (
                 <>
-                  <Button size="lg" className="bg-white text-fuchsia-600 hover:bg-white/90 text-lg px-8 py-4" asChild>
+                  <Button
+                    size="lg"
+                    className="bg-white text-fuchsia-600 hover:bg-white/90 text-lg px-8 py-4 font-semibold"
+                    asChild
+                  >
                     <Link href="/dashboard">
                       <BookOpen className="mr-2 h-5 w-5" />
                       Your Dashboard
@@ -58,7 +62,7 @@ export default function HomePage() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-lg px-8 py-4"
+                    className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-lg px-8 py-4 font-semibold"
                     asChild
                   >
                     <Link href="/editor">
@@ -69,16 +73,20 @@ export default function HomePage() {
                 </>
               ) : (
                 <>
-                  <Button size="lg" className="bg-white text-fuchsia-600 hover:bg-white/90 text-lg px-8 py-4" asChild>
+                  <Button
+                    size="lg"
+                    className="bg-white text-fuchsia-600 hover:bg-white/90 text-lg px-8 py-4 font-semibold"
+                    asChild
+                  >
                     <Link href="/register">
-                      Get Started Free
+                      Sign Up
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
                   <Button
                     size="lg"
                     variant="outline"
-                    className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-lg px-8 py-4"
+                    className="bg-white/10 hover:bg-white/20 text-white border-white/30 text-lg px-8 py-4 font-semibold"
                     asChild
                   >
                     <Link href="/login">Sign In</Link>
@@ -97,7 +105,7 @@ export default function HomePage() {
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
               Why Choose RandomGuides?
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto font-medium">
               Built by Gen Z, for Gen Z. We understand what you need.
             </p>
           </div>
@@ -108,7 +116,7 @@ export default function HomePage() {
                 <BookOpen className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold mb-4 text-gray-800">Easy to Follow</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed font-medium">
                 Step-by-step guides that actually make sense. No confusing jargon, just clear instructions.
               </p>
             </div>
@@ -118,7 +126,7 @@ export default function HomePage() {
                 <Users className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold mb-4 text-gray-800">Community Driven</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed font-medium">
                 Created by the community, for the community. Share your knowledge and learn from others.
               </p>
             </div>
@@ -128,7 +136,7 @@ export default function HomePage() {
                 <Zap className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-2xl font-bold mb-4 text-gray-800">Always Updated</h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed font-medium">
                 Fresh content that stays relevant. We keep up with the latest trends and technologies.
               </p>
             </div>
@@ -143,19 +151,10 @@ export default function HomePage() {
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
               {user ? "Trending in Your Community" : "Popular Guides"}
             </h2>
-            <p className="text-xl text-gray-600">Discover the most helpful guides from our community</p>
+            <p className="text-xl text-gray-600 font-medium">Discover the most helpful guides from our community</p>
           </div>
 
           <PublicGuidesList />
-
-          <div className="text-center mt-12">
-            <Button size="lg" variant="outline" className="text-lg px-8 py-4" asChild>
-              <Link href={user ? "/dashboard" : "/register"}>
-                {user ? "View All Your Guides" : "Join to See More"}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-          </div>
         </div>
       </section>
 
@@ -165,12 +164,16 @@ export default function HomePage() {
           <h2 className="text-4xl font-bold mb-6">
             {user ? "Ready to Create Your Next Guide?" : "Ready to Get Started?"}
           </h2>
-          <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
+          <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto font-medium">
             {user
               ? "Share your knowledge with the community and help others learn something new."
               : "Join thousands of creators sharing their knowledge and helping others learn."}
           </p>
-          <Button size="lg" className="bg-white text-fuchsia-600 hover:bg-white/90 text-lg px-8 py-4" asChild>
+          <Button
+            size="lg"
+            className="bg-white text-fuchsia-600 hover:bg-white/90 text-lg px-8 py-4 font-semibold"
+            asChild
+          >
             <Link href={user ? "/editor" : "/register"}>
               {user ? "Create Guide" : "Start Creating"}
               <ArrowRight className="ml-2 h-5 w-5" />
