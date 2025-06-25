@@ -58,48 +58,55 @@ export function LoginForm() {
   }
 
   return (
-    <div className="space-y-4">
-      <Card className="border-gray-200 shadow-xl">
-        <CardHeader className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-t-lg">
-          <CardTitle>Creator Access</CardTitle>
+    <div className="space-y-4 animate-fade-in">
+      <Card className="border-gray-200 shadow-xl rounded-xl overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white">
+          <CardTitle className="text-2xl">Creator Access</CardTitle>
           <CardDescription className="text-white/80">Sign in to create and manage guides</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username" className="text-sm font-medium">
+                Username
+              </Label>
               <Input
                 id="username"
                 name="username"
                 type="text"
                 placeholder="Enter your username"
                 required
-                className="border-gray-200 focus:border-fuchsia-500 focus:ring-fuchsia-500"
+                className="rounded-lg border-gray-200 focus:border-fuchsia-500 focus:ring-fuchsia-500 transition-all duration-300"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-sm font-medium">
+                Password
+              </Label>
               <Input
                 id="password"
                 name="password"
                 type="password"
                 placeholder="Enter your password"
                 required
-                className="border-gray-200 focus:border-fuchsia-500 focus:ring-fuchsia-500"
+                className="rounded-lg border-gray-200 focus:border-fuchsia-500 focus:ring-fuchsia-500 transition-all duration-300"
               />
             </div>
             {error && (
-              <Alert variant="destructive">
+              <Alert variant="destructive" className="rounded-lg animate-slide-in-up">
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:opacity-90"
+              className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white hover:opacity-90 rounded-lg transition-all duration-300 transform hover:scale-105"
               disabled={loading}
             >
               {loading ? (
-                "Signing in..."
+                <div className="flex items-center">
+                  <div className="loading-spinner h-4 w-4 mr-2"></div>
+                  Signing in...
+                </div>
               ) : (
                 <>
                   <LogIn className="h-4 w-4 mr-2" />
@@ -111,11 +118,11 @@ export function LoginForm() {
         </CardContent>
       </Card>
 
-      <Card className="border-gray-200 shadow-md">
+      <Card className="border-gray-200 shadow-md rounded-xl animate-fade-in-delay">
         <CardContent className="pt-6">
           <div className="text-center space-y-3">
             <p className="text-sm text-gray-600">Don't have an account yet?</p>
-            <Button variant="outline" className="w-full" asChild>
+            <Button variant="outline" className="w-full rounded-lg transition-all duration-300 hover:scale-105" asChild>
               <Link href="/register">
                 <UserPlus className="h-4 w-4 mr-2" />
                 Create New Account
